@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Achu!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Lato:wght@300;400;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <meta name="description" content="A special birthday celebration for Achu">
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #1a0529; /* Deep purple fallback */
+            overflow-x: hidden;
+            color: #f3e8ff; /* Light lavender text */
+        }
+
+        #threejs-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Behind content, but above static body bg */
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        .title-font {
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 0.05em;
+        }
+        
+        .cursive-font {
+            font-family: 'Dancing Script', cursive;
+        }
+
+
+        /* Card style for messages */
+        .message-card {
+            background-color: rgba(46, 26, 70, 0.7); /* Semi-transparent deep purple */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(196, 181, 253, 0.3); /* Lavender border */
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        /* Photo gallery styles */
+        .photo-frame {
+            background-size: cover;
+            background-position: center;
+            border: 4px solid #e9d5ff; /* Light purple, Tailwind's purple-200 */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), 0 0 30px rgba(167, 139, 250, 0.3);
+            transition: all 0.6s cubic-bezier(0.17, 0.84, 0.44, 1);
+            animation: float-photo 8s ease-in-out infinite;
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        /* Make each photo float at different times */
+        .photo-frame:nth-child(1) { animation-delay: 0s; }
+        .photo-frame:nth-child(2) { animation-delay: -1.3s; }
+        .photo-frame:nth-child(3) { animation-delay: -2.6s; }
+        .photo-frame:nth-child(4) { animation-delay: -3.9s; }
+        .photo-frame:nth-child(5) { animation-delay: -5.2s; }
+        .photo-frame:nth-child(6) { animation-delay: -6.5s; }
+        
+        /* Cosmic glow effect */
+        .photo-frame::after {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            right: -15px;
+            bottom: -15px;
+            border-radius: 15px;
+            background: radial-gradient(circle at 50% 50%, rgba(167, 139, 250, 0.2), transparent 70%);
+            z-index: -1;
+            opacity: 0.7;
+            filter: blur(10px);
+            transition: all 0.6s ease;
+        }
+        
+        .photo-frame:hover {
+            transform: scale(1.08) translateY(-10px) rotateX(5deg) rotateY(-5deg);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4), 0 0 40px rgba(167, 139, 250, 0.6);
+            z-index: 10;
+        }
+        
+        .photo-frame:hover::after {
+            opacity: 1;
+            background: radial-gradient(circle at 50% 50%, rgba(167, 139, 250, 0.4), transparent 80%);
+        }
+        
+        @keyframes float-photo {
+            0% {
+                transform: translateY(0px) rotateX(0deg) rotateY(0deg);
+            }
+            50% {
+                transform: translateY(-15px) rotateX(3deg) rotateY(3deg);
+            }
+            100% {
+                transform: translateY(0px) rotateX(0deg) rotateY(0deg);
+            }
+        }
+        
+        .photo-error-fallback {
+            background: linear-gradient(135deg, #a78bfa, #7c3aed); /* purple-400 to purple-600 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem; /* 24px */
+            color: white;
+        }
+
+
+        /* Cake Styles - Elegant Version */
+        .cake-container-archana {
+            perspective: 1200px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .cake-container-archana:active {
+            transform: scale(0.97);
+        }
+
+        .cake-archana {
+            width: 200px; 
+            height: 220px; /* Taller cake for elegance */
+            position: relative;
+            transform-style: preserve-3d;
+            animation: floatCakeArchana 5s ease-in-out infinite;
+            margin: 0 auto;
+        }
+        @media (max-width: 640px) {
+            .cake-archana { width: 170px; height: 190px; }
+        }
+
+        .cake-text-archana {
+            position: absolute;
+            top: 15px; left: 50%;
+            transform: translate(-50%, 0);
+            z-index: 20;
+            background: rgba(126, 58, 237, 0.85); /* purple-600 */
+            color: white;
+            padding: 0.5rem 1.2rem; 
+            border-radius: 20px; 
+            font-weight: 600; /* Semi-bold */
+            font-size: 0.875rem; /* 14px */
+            border: 2px solid rgba(233, 213, 255, 0.7); /* purple-200 border */
+            animation: pulseCakeTextArchana 1.8s ease-in-out infinite;
+            white-space: nowrap;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.2), 0 0 20px rgba(126, 58, 237, 0.3);
+        }
+
+        /* Cake Base (Plate) */
+        .cake-archana::after {
+            content: '';
+            position: absolute;
+            width: 130%; 
+            height: 15px; /* Thicker plate */
+            background: linear-gradient(to right, #c4b5fd, #a78bfa, #8b5cf6); /* purple-300, 400, 500 */
+            border-radius: 50%;
+            bottom: -10px; 
+            left: -15%;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            z-index: -1;
+        }
+
+        /* Cake Layers */
+        .cake-layer {
+            position: absolute;
+            width: 100%;
+            left: 0;
+            border-radius: 10px 10px 50% 50% / 10px 10px 20px 20px; /* Elegant curve */
+            box-shadow: inset 0 -3px 8px rgba(0,0,0,0.1), 0 5px 10px rgba(0,0,0,0.1);
+        }
+        .cake-layer.l1 { /* Bottom Layer */
+            height: 70px;
+            background: linear-gradient(to bottom, #d8b4fe, #c084fc); /* purple-300 to purple-400 */
+            bottom: 0;
+        }
+        .cake-layer.l2 { /* Middle Layer */
+            height: 60px;
+            width: 90%; left: 5%;
+            background: linear-gradient(to bottom, #e9d5ff, #d8b4fe); /* purple-200 to purple-300 */
+            bottom: 65px; /* Stacked */
+             border-radius: 8px 8px 40% 40% / 8px 8px 18px 18px;
+        }
+        .cake-layer.l3 { /* Top Layer */
+            height: 50px;
+            width: 80%; left: 10%;
+            background: linear-gradient(to bottom, #f3e8ff, #e9d5ff); /* purple-100 to purple-200 */
+            bottom: 120px; /* Stacked */
+            border-radius: 6px 6px 30% 30% / 6px 6px 15px 15px;
+        }
+        
+        /* Frosting Drips */
+        .frosting-drip-archana {
+            position: absolute;
+            background: white;
+            border-radius: 0 0 50% 50%;
+            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+            z-index: 5;
+        }
+        .frosting-drip-archana.drip1 { top: 45px; left: 15%; width: 18px; height: 35px; background: #f5d0fe; } /* orchid */
+        .frosting-drip-archana.drip2 { top: 42px; left: 40%; width: 15px; height: 28px; background: #e9d5ff; } /* light purple */
+        .frosting-drip-archana.drip3 { top: 45px; left: 65%; width: 16px; height: 32px; background: #f5d0fe; }
+        .frosting-drip-archana.drip4 { top: 100px; left: 25%; width: 15px; height: 30px; background: #e9d5ff; } /* Drips on middle layer */
+        .frosting-drip-archana.drip5 { top: 98px; left: 55%; width: 14px; height: 25px; background: #f5d0fe; }
+
+
+        /* Candle */
+        .candle-archana {
+            position: absolute;
+            width: 10px; height: 50px;
+            background: linear-gradient(to bottom, #fff, #f0e6ff); /* Off-white */
+            top: -50px; /* On top layer */
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 5px 5px 0 0;
+            z-index: 10;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        .flame-archana {
+            position: absolute;
+            width: 16px; height: 28px;
+            background: linear-gradient(to bottom, #fff3a3, #ffc107, #ff8f00);
+            border-radius: 50% 50% 20% 20% / 50% 50% 30% 30%;
+            top: -28px; /* Above candle */
+            left: 50%;
+            transform: translateX(-50%);
+            animation: flickerFlameArchana 0.5s ease-in-out infinite alternate;
+            box-shadow: 0 0 10px #ffc107, 0 0 20px #ffc107, 0 0 30px rgba(255, 193, 7, 0.3);
+            z-index: 11;
+        }
+        
+        /* Small floral/sparkle decorations */
+        .cake-deco-archana {
+            position: absolute;
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            background: gold;
+            box-shadow: 0 0 5px gold;
+            z-index: 6;
+        }
+        .cake-deco-archana.s1 { top: 50px; left: 20%; width: 10px; height: 10px; background: #faf089; } /* Tailwind yellow-200 */
+        .cake-deco-archana.s2 { top: 70px; right: 15%; background: #fde68a;} /* Tailwind yellow-300 */
+        .cake-deco-archana.s3 { top: 110px; left: 30%; width: 8px; height: 8px; background: #fef3c7;} /* Tailwind yellow-100 */
+        .cake-deco-archana.s4 { top: 130px; right: 25%; background: #fde68a;}
+
+
+        /* Photo pulse animation on click */
+        @keyframes photo-pulse {
+            0% { transform: scale(1.1) translateY(0); }
+            50% { transform: scale(1.15) translateY(-5px); }
+            100% { transform: scale(1) translateY(0); }
+        }
+        
+        /* Confetti */
+        .confetti-container-archana {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh; 
+            overflow: hidden; z-index: 100; pointer-events: none; 
+        }
+        .confetto-archana {
+            position: absolute; width: 8px; height: 15px; /* Rectangular */
+            opacity: 0.9;
+            animation: fallConfettiArchana linear forwards;
+        }
+        
+        /* Smoke */
+        .smoke-archana {
+            position: absolute; width: 8px; height: 15px; 
+            background: rgba(220, 220, 230, 0.5); 
+            border-radius: 50%;
+            top: -70px; /* Start higher */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 12; 
+            animation: smokeUpEffectArchana 3.5s ease-out forwards;
+        }
+
+        /* Space star sparkle effect */
+        .space-star {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: white;
+            filter: blur(1px);
+            opacity: 0;
+            animation: star-twinkle 3s ease-in-out infinite;
+        }
+        
+        @keyframes star-twinkle {
+            0%, 100% { 
+                opacity: 0;
+                transform: scale(0.1);
+            }
+            50% { 
+                opacity: 1; 
+                transform: scale(1);
+            }
+        }
+        
+        /* Each photo frame gets a different star position */
+        .photo-frame:nth-child(1) .space-star { top: -15px; right: -15px; animation-delay: 0.2s; }
+        .photo-frame:nth-child(2) .space-star { bottom: -12px; left: -10px; animation-delay: 1.5s; }
+        .photo-frame:nth-child(3) .space-star { top: 10%; left: -12px; animation-delay: 2.8s; }
+        .photo-frame:nth-child(4) .space-star { bottom: 20%; right: -8px; animation-delay: 0.9s; }
+        .photo-frame:nth-child(5) .space-star { top: -8px; left: 30%; animation-delay: 1.3s; }
+        .photo-frame:nth-child(6) .space-star { top: 80%; right: 20%; animation-delay: 0.7s; }
+
+        /* Animations */
+        @keyframes pulseCakeTextArchana { 
+            0%, 100% { transform: translate(-50%, 0) scale(1); }
+            50% { transform: translate(-50%, 0) scale(1.05); }
+        }
+        @keyframes floatCakeArchana { 
+            0%, 100% { transform: translateY(0) rotateY(0deg); }
+            50% { transform: translateY(-15px) rotateY(10deg); } /* Added Y rotation */
+        }
+        @keyframes flickerFlameArchana { 
+            0% { transform: translateX(-50%) scale(1) skewX(-2deg); opacity: 0.9; }
+            50% { transform: translateX(-50%) scale(1.15, 1.3) skewX(2deg); opacity: 1; }
+            100% { transform: translateX(-50%) scale(1.05, 1.2) skewX(-2deg); opacity: 0.95; }
+        }
+        @keyframes spinMusicIconArchana { 
+            from { transform: rotate(0deg); } to { transform: rotate(360deg); }
+        }
+        @keyframes fallConfettiArchana { 
+            0% { top: -10%; transform: rotateZ(0deg) rotateX(0deg) translateX(0px); opacity: 0.9; }
+            100% { top: 110%; transform: rotateZ(Math.random()*360 + 'deg') rotateX(Math.random()*360 + 'deg') translateX(calc( (0.5 - Math.random()) * 30vw )); opacity: 0; }
+        }
+        @keyframes smokeUpEffectArchana { 
+            0% { opacity: 1; transform: translateX(-50%) translateY(0px) scale(1); }
+            50% { opacity: 0.7; transform: translateX(calc(-50% + (0.5 - Math.random())*10px)) translateY(-30px) scale(1.8); }
+            100% { opacity: 0; transform: translateX(calc(-50% + (0.5 - Math.random())*20px)) translateY(-70px) scale(2.5); }
+        }
+
+        .fade-in-section {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.645, 0.045, 0.355, 1), transform 0.8s cubic-bezier(0.645, 0.045, 0.355, 1);
+        }
+        .fade-in-section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-purple-900 via-indigo-900 to-pink-900 min-h-screen">
+    <div id="threejs-container"></div>
+    
+    <div class="content-wrapper flex flex-col items-center w-full min-h-screen px-4 py-12 sm:py-16 text-center">
+        
+        <header class="mb-10 sm:mb-16 fade-in-section">
+            <h1 class="title-font text-5xl sm:text-6xl md:text-7xl text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-indigo-400 py-2">
+                Happy Birthday Achu!
+            </h1>
+            <p class="text-xl sm:text-2xl text-purple-200 mt-3">To my wonderful wife and the amazing mother of Amelia & Asher.</p>
+        </header>
+        
+        <section class="w-full max-w-2xl my-8 sm:my-10 fade-in-section">
+            <div class="message-card p-6 sm:p-8 rounded-xl">
+                <h2 class="title-font text-3xl sm:text-4xl mb-4 text-pink-300">My Dearest Achu,</h2>
+                <p class="text-lg sm:text-xl mb-4 leading-relaxed text-purple-100">
+                    Today my heart celebrates you—the extraordinary woman who fills every corner of my life with boundless joy, tender warmth, and endless love. Witnessing you as a mother to our precious Amelia and Asher is a privilege that deepens my admiration and love for you each passing day. Your grace, patience, and compassion create the most beautiful home I could have ever dreamed of.
+                </p>
+                <p class="text-lg sm:text-xl mb-4 leading-relaxed text-purple-100">
+                    Thank you for every laughter-filled moment, every whispered dream beneath the stars, and every quiet evening spent wrapped in your embrace. Your presence makes our family complete, turning our home into my favorite place in the world.
+                </p>
+                <p class="text-lg sm:text-xl leading-relaxed text-purple-100">
+                    May your birthday sparkle as brilliantly as your smile and glow as warmly as your heart. Here's to a lifetime of happiness, adventure, and loving you more deeply every day.
+                </p>
+                <p class="cursive-font text-3xl sm:text-4xl text-pink-300 mt-6 text-right">With all the love in my heart,</p>
+                <p class="cursive-font text-2xl sm:text-3xl text-pink-300 text-right">Forever yours,</p>
+                <p class="cursive-font text-3xl sm:text-4xl text-pink-300 text-right">Anoop</p>
+            </div>
+        </section>
+
+        <section class="w-full max-w-4xl my-12 sm:my-16 fade-in-section">
+            <h2 class="title-font text-3xl sm:text-4xl mb-8 text-indigo-300">Our Cherished Moments</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 sm:gap-14 px-4 sm:px-8 py-4">
+                <div class="photo-frame aspect-square rounded-lg" data-src="images/photo1.jpg">
+                    <div class="space-star"></div>
+                </div>
+                <div class="photo-frame aspect-square rounded-lg" data-src="images/photo2.jpg">
+                    <div class="space-star"></div>
+                </div>
+                <div class="photo-frame aspect-square rounded-lg" data-src="images/photo3.jpg">
+                    <div class="space-star"></div>
+                </div>
+                <div class="photo-frame aspect-square rounded-lg" data-src="images/photo4.jpg">
+                    <div class="space-star"></div>
+                </div>
+                <div class="photo-frame aspect-square rounded-lg" data-src="images/photo5.jpg">
+                    <div class="space-star"></div>
+                </div>
+                <div class="photo-frame aspect-square rounded-lg" data-src="images/photo6.jpg">
+                    <div class="space-star"></div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="w-full max-w-xl my-8 sm:my-10 fade-in-section">
+             <div class="message-card p-6 rounded-xl text-center">
+                <h3 class="title-font text-2xl sm:text-3xl mb-3 text-pink-300">A Special Wish...</h3>
+                <p class="text-lg text-purple-100">Happy Birthday, Amma! We love you so much!</p>
+                <p class="text-2xl mt-2">
+                    <span class="text-pink-400">Amelia</span> & <span class="text-indigo-400">Asher</span>
+                </p>
+                <div class="text-4xl mt-3 text-red-400">❤️</div>
+            </div>
+        </section>
+
+        <div class="cake-container-archana my-10 sm:my-16 w-full max-w-xs mx-auto fade-in-section">
+            <div class="cake-archana">
+                <div class="cake-text-archana">Click for a Surprise!</div>
+                <div class="cake-layer l1"></div>
+                <div class="cake-layer l2"></div>
+                <div class="cake-layer l3"></div>
+                <div class="frosting-drip-archana drip1"></div>
+                <div class="frosting-drip-archana drip2"></div>
+                <div class="frosting-drip-archana drip3"></div>
+                <div class="frosting-drip-archana drip4"></div>
+                <div class="frosting-drip-archana drip5"></div>
+                <div class="cake-deco-archana s1"></div>
+                <div class="cake-deco-archana s2"></div>
+                <div class="cake-deco-archana s3"></div>
+                <div class="cake-deco-archana s4"></div>
+                <div class="candle-archana">
+                    <div class="flame-archana"></div>
+                </div>
+            </div>
+        </div>
+        
+        <button id="music-toggle-archana" class="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 w-14 h-14 rounded-full bg-purple-500 hover:bg-pink-500 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-opacity-60 flex items-center justify-center shadow-xl z-50 transition-all duration-300 transform hover:scale-110">
+            <span id="music-icon-archana" class="text-3xl">🎵</span>
+        </button>
+    </div>
+    
+    <audio id="background-music-archana" loop autoplay>
+        <source src="audio/happy-birthday.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Three.js Background Animation ---
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            const threeJsContainer = document.getElementById('threejs-container');
+            if (threeJsContainer) {
+                threeJsContainer.appendChild(renderer.domElement);
+            }
+
+            camera.position.z = 5;
+
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particleCount = 700; // Number of particles
+            const posArray = new Float32Array(particleCount * 3);
+            const particleColors = new Float32Array(particleCount * 3);
+            const colorPalette = [
+                new THREE.Color(0xff79c6), // Pink
+                new THREE.Color(0xbd93f9), // Purple
+                new THREE.Color(0x8be9fd), // Cyan
+                new THREE.Color(0xf1fa8c)  // Yellow
+            ];
+
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                posArray[i] = (Math.random() - 0.5) * 15; // x
+                posArray[i + 1] = (Math.random() - 0.5) * 15; // y
+                posArray[i + 2] = (Math.random() - 0.5) * 15; // z
+
+                const color = colorPalette[Math.floor(Math.random() * colorPalette.length)];
+                particleColors[i] = color.r;
+                particleColors[i+1] = color.g;
+                particleColors[i+2] = color.b;
+            }
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            particlesGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+
+
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.05,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending // For a glowing effect
+            });
+            const particleMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particleMesh);
+            
+            // Mouse movement effect
+            let mouseX = 0, mouseY = 0;
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+            });
+
+
+            const clock = new THREE.Clock();
+            function animateThreeJs() {
+                const elapsedTime = clock.getElapsedTime();
+                particleMesh.rotation.y = elapsedTime * 0.05;
+                particleMesh.rotation.x = elapsedTime * 0.03;
+
+                // Parallax effect
+                camera.position.x += (mouseX * 0.5 - camera.position.x) * 0.05;
+                camera.position.y += (mouseY * 0.5 - camera.position.y) * 0.05;
+                camera.lookAt(scene.position);
+
+                renderer.render(scene, camera);
+                requestAnimationFrame(animateThreeJs);
+            }
+            if (threeJsContainer) animateThreeJs(); // Start animation only if container exists
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            });
+
+            // --- Photo Gallery ---
+            const photoFrames = document.querySelectorAll('.photo-frame');
+            photoFrames.forEach(frame => {
+                const dataSrc = frame.getAttribute('data-src');
+                if (dataSrc) {
+                    const img = new Image();
+                    img.onload = () => frame.style.backgroundImage = `url(${dataSrc})`;
+                    img.onerror = () => {
+                        frame.classList.add('photo-error-fallback');
+                        frame.innerHTML = '🖼️'; // Fallback icon
+                    };
+                    // IMPORTANT: Ensure your images (photo1.jpg, photo2.jpg, etc.) 
+                    // are in the same directory as this HTML file, or update the paths.
+                    img.src = dataSrc; // This will now use "images/photo1.jpg", "images/photo2.jpg", etc.
+                    
+                    // Click effect: just add a little pulse animation instead of expanding
+                    frame.addEventListener('click', () => {
+                        frame.style.animation = 'none'; // Reset animation
+                        setTimeout(() => {
+                            frame.style.animation = 'photo-pulse 0.5s ease-out forwards, float-photo 8s ease-in-out infinite';
+                        }, 10);
+                    });
+                }
+            });
+
+            // --- Music Toggle ---
+            const musicToggleBtn = document.getElementById('music-toggle-archana');
+            const bgMusic = document.getElementById('background-music-archana');
+            const musicIconEl = document.getElementById('music-icon-archana');
+
+            if (musicToggleBtn && bgMusic && musicIconEl) {
+                // Try to autoplay music when page loads
+                window.addEventListener('load', () => {
+                    bgMusic.volume = 0.25; // Softer volume
+                    bgMusic.play().then(() => {
+                        musicIconEl.style.animation = 'spinMusicIconArchana 3s linear infinite';
+                        musicIconEl.textContent = '🎶';
+                    }).catch(e => {
+                        console.warn("Autoplay failed - this is normal due to browser policies:", e);
+                        // Most browsers require user interaction before audio can play
+                    });
+                });
+            
+                musicToggleBtn.addEventListener('click', () => {
+                    if (bgMusic.paused) {
+                        bgMusic.volume = 0.25; // Softer volume
+                        bgMusic.play().then(() => {
+                            musicIconEl.style.animation = 'spinMusicIconArchana 3s linear infinite';
+                            musicIconEl.textContent = '🎶';
+                        }).catch(e => console.warn("Audio play failed:", e));
+                    } else {
+                        bgMusic.pause();
+                        musicIconEl.style.animationPlayState = 'paused';
+                        musicIconEl.textContent = '🎵';
+                    }
+                });
+                
+                // Set initial icon
+                musicIconEl.textContent = bgMusic.paused ? '🎵' : '🎶';
+                if(!bgMusic.paused) musicIconEl.style.animation = 'spinMusicIconArchana 3s linear infinite';
+            }
+
+            // --- Cake Interaction & Confetti ---
+            const cakeElement = document.querySelector('.cake-archana');
+            const flameElement = cakeElement ? cakeElement.querySelector('.flame-archana') : null;
+            const cakeTextEl = cakeElement ? cakeElement.querySelector('.cake-text-archana') : null;
+            let cakeClicks = 0;
+
+            function createConfettiShowerArchana() {
+                const container = document.createElement('div');
+                container.className = 'confetti-container-archana';
+                document.body.appendChild(container);
+
+                const confettiColors = ['#f9a8d4', '#c084fc', '#818cf8', '#fcd34d', '#ffffff']; // pink, purple, indigo, amber, white
+                for (let i = 0; i < 150; i++) { // More confetti
+                    const confetto = document.createElement('div');
+                    confetto.className = 'confetto-archana';
+                    confetto.style.background = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+                    confetto.style.left = Math.random() * 100 + 'vw';
+                    confetto.style.animationDelay = Math.random() * 0.5 + 's'; // Quicker start
+                    confetto.style.animationDuration = Math.random() * 2 + 2.5 + 's'; // 2.5-4.5s fall
+                    confetto.style.transform = `scale(${Math.random() * 0.5 + 0.5})`; // Random size
+                    container.appendChild(confetto);
+                }
+                setTimeout(() => container.remove(), 5000);
+            }
+            
+            if (cakeElement && flameElement && cakeTextEl) {
+                cakeElement.addEventListener('click', () => {
+                    cakeClicks++;
+                    if (cakeClicks === 1) {
+                        flameElement.style.opacity = '0';
+                        flameElement.style.transition = 'opacity 0.3s ease';
+                        
+                        const smokeEl = document.createElement('div');
+                        smokeEl.className = 'smoke-archana';
+                        const candleEl = cakeElement.querySelector('.candle-archana');
+                        if(candleEl) candleEl.appendChild(smokeEl);
+
+                        cakeTextEl.textContent = "Make a Wish!";
+                        cakeTextEl.style.background = "rgba(244, 114, 182, 0.85)"; // pink-500
+
+                        setTimeout(() => {
+                            createConfettiShowerArchana();
+                            cakeTextEl.textContent = "Happy Birthday!";
+                            cakeTextEl.style.background = "rgba(167, 139, 250, 0.85)"; // purple-400
+                            if (bgMusic && bgMusic.paused && musicToggleBtn) musicToggleBtn.click();
+                        }, 1200);
+                    } else {
+                        createConfettiShowerArchana();
+                        const funMessages = ["So much love!", "Best Day Ever!", "Celebrations!", "Woohoo!", "Party Time!"];
+                        cakeTextEl.textContent = funMessages[Math.floor(Math.random() * funMessages.length)];
+                        cakeTextEl.style.background = `rgba(${Math.random()*100 + 100}, ${Math.random()*100 + 50}, ${Math.random()*100 + 150}, 0.85)`;
+                    }
+                });
+            }
+
+            // --- Scroll Animations for Sections ---
+            const sections = document.querySelectorAll('.fade-in-section');
+            const sectionObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            sections.forEach(section => sectionObserver.observe(section));
+        });
+    </script>
+</body>
+</html>
