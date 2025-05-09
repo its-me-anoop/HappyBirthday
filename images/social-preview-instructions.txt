@@ -1,9 +1,0 @@
-To generate the social preview image:
-
-1. Open the social-preview.html file in your browser
-2. Take a screenshot of the entire page (try to match the dimensions 1200x630px if possible)
-3. Save the screenshot as "social-preview.jpg" in this folder
-
-This image will be used when your website is shared on social media platforms.
-
-Recommended dimensions: 1200x630 pixels (ratio 1.91:1)
