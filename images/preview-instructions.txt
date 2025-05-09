@@ -1,0 +1,11 @@
+To create a compatible preview image for iMessage and WhatsApp:
+
+1. Open the preview-template.html file in a browser
+2. Take a screenshot of the entire page
+3. Save the screenshot as "preview.jpg" in this folder
+4. Update the index.html file to use this new image (the meta tags already point to it)
+
+Important details for messaging apps:
+- Image dimensions: 1200x630 pixels (aspect ratio 1.91:1)
+- File format: JPEG or PNG
+- File size: Ideally under 300KB
